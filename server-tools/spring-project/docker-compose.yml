@@ -1,0 +1,9 @@
+services:
+  spring-mock:
+    image: nginx:alpine
+    container_name: spring-backend
+    restart: always
+    ports:
+      - "9090:80" # Mapeamos el 9090 de tu servidor al 80 del contenedor
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html

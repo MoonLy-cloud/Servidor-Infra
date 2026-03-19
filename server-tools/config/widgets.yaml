@@ -1,0 +1,12 @@
+- resources:
+    cpu: true
+    memory: true
+    disk: /
+    celsius: true
+
+- search:
+    provider: google
+    target: _blank
+
+- date:
+    format: "dd/MM/yyyy"

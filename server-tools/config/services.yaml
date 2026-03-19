@@ -1,0 +1,30 @@
+- Mi Imperio Dogocorp:
+    - Mi Nube (Nextcloud):
+        icon: nextcloud.png
+        href: https://drive.dogocorp.online
+        description: "Archivos Seguros"
+
+    - Portainer (Docker):
+        icon: portainer.png
+        href: https://docker.dogocorp.online
+        description: "Control de Contenedores"
+        widget:
+            type: portainer
+            url: http://192.168.1.90:9000
+            env: 3
+            fields: ["running", "stopped", "total"]
+            key: ptr_jPy3QdCYdFA53oiVBnHyXlkjD5hwxfX4/dKB3B+/Ou4=
+
+
+- Juegos:
+    - Minecraft Server:
+        icon: minecraft.png
+        description: "server: mc.dogocorp.online"
+        widget:
+            type: minecraft
+            url: udp://192.168.1.90:25565
+            fields: ["players", "version", "status"]
+    
+    - Terraria:
+        icon: terraria.png
+        description: "server: tr.dogocorp.online"

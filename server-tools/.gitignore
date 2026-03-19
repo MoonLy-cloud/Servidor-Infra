@@ -1,0 +1,10 @@
+# Ignorar carpetas de datos (bases de datos y mundos)
+**/nas-db/
+**/worlds/
+**/backups/
+**/node_modules/
+**/__pycache__/
+
+# Ignorar archivos de configuración sensible
+**/.env
+**/*.log

@@ -1,0 +1,99 @@
+services:
+  # ----------------------------------------
+  # HERRAMIENTA 1: PORTAINER
+  # ----------------------------------------
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+  homepage:
+    image: ghcr.io/gethomepage/homepage:latest
+    container_name: homepage
+    ports:
+      - 3000:3000
+    volumes:
+      - ./config:/app/config # Aquí vivirán tus archivos de configuración
+      - /var/run/docker.sock:/var/run/docker.sock # Para que pueda leer el estado de Docker
+    environment:
+      PUID: 983
+      PGID: 983
+      HOMEPAGE_ALLOWED_HOSTS: "*"
+    restart: unless-stopped
+
+  # ----------------------------------------
+  # HERRAMIENTA 2: NAS (BASE DE DATOS)
+  # ----------------------------------------
+  nas-db:
+    image: mariadb:10.6
+    container_name: nas-db
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD= ${MYSQL_PASS}
+      - MYSQL_PASSWORD= ${MYSQL_PASS}
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    volumes:
+      - ./nas-db:/var/lib/mysql
+
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'   # Entrada Pública HTTP
+      - '81:81'   # Panel de Administración (Solo para ti)
+      - '443:443' # Entrada Pública HTTPS (Candadito)
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+
+  # ----------------------------------------
+  # HERRAMIENTA 3: NAS (NEXTCLOUD)
+  # ----------------------------------------
+  nas-web:
+    image: nextcloud
+    container_name: nas-web
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - MYSQL_HOST=nas-db
+      - MYSQL_PASSWORD= ${MYSQL_PASS}
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - NEXTCLOUD_DATA_DIR=/var/www/html/data
+    volumes:
+      - ./nas-config:/var/www/html
+      # TU DISCO DURO (Asegúrate de que esta carpeta exista y tenga permisos)
+      - /mnt/nas_data:/var/www/html/data
+    depends_on:
+      - nas-db
+
+  # ------------------------------------------
+  # APP DE PRUEBA SPRINGBOOT 4
+  # ------------------------------------------
+
+  spring-app:
+    build: ./spring-project # Supone que tienes una carpeta con tu Dockerfile
+    container_name: spring-backend
+    restart: always
+    ports:
+      - "9090:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://nas-db:3306/spring_db # Reutilizando tu MariaDB
+    depends_on:
+      - nas-db
+
+# ----------------------------------------
+# VOLÚMENES (¡Esto va al final y alineado a la izquierda!)
+# ----------------------------------------
+volumes:
+  portainer_data:
