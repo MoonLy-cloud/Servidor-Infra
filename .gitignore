@@ -3,6 +3,7 @@ nas-db/
 nas-config/
 data/
 letsencrypt/
+mc-pruebas/ddns-data/
 
 # Minecraft y Terraria (Evitar subir mundos y logs pesados)
 **/worlds/
