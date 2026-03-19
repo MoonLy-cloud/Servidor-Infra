@@ -1,0 +1,82 @@
+/* 1. CONFIGURACIÓN GENERAL */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-container {
+    text-align: center;
+    width: 90%;
+    max-width: 1000px;
+}
+
+/* 2. ENCABEZADO */
+h1 {
+    font-family: 'Pacifico', cursive; /* Letra estilo firma bonita */
+    font-size: 3.5rem;
+    color: #ffeb3b; /* Dorado Luna */
+    text-shadow: 0 0 10px #ff69b4; /* Brillo rosa */
+    margin-bottom: 0;
+}
+
+.luna-symbol {
+    font-size: 4rem;
+    animation: flotar 3s infinite ease-in-out; /* Animación simple */
+}
+
+/* 3. EL TRUCO DE LAS CARTAS (FLEXBOX) */
+.contenedor-cartas {
+    display: flex;           /* ¡ESTO ES LA CLAVE! Activa el modo flexible */
+    justify-content: center; /* Centra las cartas horizontalmente */
+    gap: 30px;               /* Espacio entre carta y carta */
+    flex-wrap: wrap;         /* Si la pantalla es muy chica (celular), baja una carta */
+    margin-top: 50px;
+}
+
+/* 4. ESTILO DE CADA CARTA */
+.card {
+    background: rgba(255, 255, 255, 0.1); /* Blanco transparente (vidrio) */
+    backdrop-filter: blur(10px);          /* Efecto borroso de fondo */
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    width: 300px; /* Ancho fijo para que se vean iguales */
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+.card:hover {
+    transform: translateY(-10px); /* Al pasar el mouse, sube un poco */
+    border-color: #ff69b4; /* Borde rosa al tocar */
+}
+
+.icon { font-size: 3rem; margin-bottom: 10px; }
+
+h2 { color: #ff69b4; /* Rosa Sailor Moon */ }
+
+/* 5. BOTONES */
+.btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 25px;
+    background: linear-gradient(45deg, #ff69b4, #ffb347);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+}
+
+/* 6. ANIMACIÓN DE FLOTAR */
+@keyframes flotar {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}

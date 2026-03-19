@@ -1,0 +1,12 @@
+services:
+  web_flask:
+    build: .
+    container_name: dogo_flask
+    restart: always
+    ports:
+      - "5050:5000"
+    volumes:
+      - .:/app  # <--- ¡LA MAGIA! Tu carpeta actual (.) es la carpeta /app del contenedor
+    environment:
+      - FLASK_ENV=development # Activa el modo debug para ver errores en vivo
+      - FLASK_DEBUG=1

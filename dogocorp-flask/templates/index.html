@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dogocorp - Moon Crystal Power</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="main-container">
+        <header>
+            <div class="luna-symbol">🌙</div>
+            <h1>Dogocorp Systems</h1>
+            <p>Transformando código en magia</p>
+        </header>
+
+        <div class="contenedor-cartas">
+            
+            <div class="card card-mars">
+                <div class="icon">🔥</div>
+                <h2>Mi Nube</h2>
+                <p>Archivos protegidos por el fuego de Marte.</p>
+                <a href="https://drive.dogocorp.online" class="btn">Acceder</a>
+            </div>
+
+            <div class="card card-mercury">
+                <div class="icon">💧</div>
+                <h2>Dashboard</h2>
+                <p>Análisis de datos con la sabiduría de Mercurio.</p>
+                <a href="https://home.dogocorp.online" class="btn">Ver Estado</a>
+            </div>
+
+        </div>
+
+        <footer>
+            <p>Hecho con 💖 y Python por el futuro Dr. Linux</p>
+        </footer>
+    </div>
+
+</body>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</html>

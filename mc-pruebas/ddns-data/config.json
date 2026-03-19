@@ -1,0 +1,12 @@
+{
+  "settings": [
+    {
+      "provider": "dondominio",
+      "domain": "dogocorp.online",
+      "host": "@",
+      "username": "Carmelito",
+      "password": "ZxkxMbZ5uKTz",
+      "ip_version": "ipv4"
+    }
+  ]
+}

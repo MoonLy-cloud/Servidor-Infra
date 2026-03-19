@@ -1,0 +1,20 @@
+# Bases de datos y archivos pesados de Nextcloud/MariaDB
+nas-db/
+nas-config/
+data/
+letsencrypt/
+
+# Minecraft y Terraria (Evitar subir mundos y logs pesados)
+**/worlds/
+**/world/
+**/backups/
+**/*.log
+**/*.jar
+!spring-project/*.jar # Excepción si quieres subir el jar de tu app de prácticas
+
+# Python
+**/__pycache__/
+**/.venv/
+
+# Secretos
+**/.env

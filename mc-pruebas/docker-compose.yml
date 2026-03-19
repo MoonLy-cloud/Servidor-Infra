@@ -1,0 +1,89 @@
+services:
+# --- SERVICIO 1: MINECRAFT FABRIC 1.20.1 ---
+  mc:
+    image: itzg/minecraft-server
+    container_name: mc-server
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "FABRIC"
+      VERSION: "1.20.1"
+      
+      # Memoria (Ajustada para tu servidor)
+      INIT_MEMORY: "12G"
+      MAX_MEMORY: "16G"
+      
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: ${RCON_MC}
+      RCON_PORT: 25575
+      # Optimizaciones de Aikar (Las de tu archivo anterior)
+      JVM_OPTS: "-XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1"
+      
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+
+# --- SERVICIO 2: DOMINIO ---
+  ddns:
+    image: qmcgaw/ddns-updater
+    container_name: ddns-updater
+    ports:
+      - "8005:8000"
+    volumes:
+      - ./ddns-data:/updater/data
+    environment:
+      - PERIOD=5m
+      - TZ=America/Mexico_City
+    restart: always
+
+# --- SERVICIO 3: RESPALDOS AUTOMÁTICOS ---
+  backup:
+    image: itzg/mc-backup
+    container_name: mc-backup
+    restart: always
+    environment:
+      # Conexión con el servidor
+      RCON_HOST: mc-server       # Nombre del contenedor de Minecraft
+      RCON_PORT: 25575
+      RCON_PASSWORD: ${RCON_MC} # ¡LA MISMA QUE PUSISTE ARRIBA!
+      
+      # Configuración del Backup
+      BACKUP_INTERVAL: "8h"     # Hace un backup cada 8 horas
+      PRUNE_BACKUPS_DAYS: 3      # Borra backups más viejos de 3 días (para no llenar disco)
+      INITIAL_DELAY: "10m"       # Espera 10 min al arrancar antes de intentar nada
+    volumes:
+      # Necesita acceso a los datos del servidor (Solo lectura por seguridad)
+      - ./data:/data:ro
+      # Aquí guardará los Zips
+      - ./backups:/backups
+    depends_on:
+      - mc
+
+# --- SERVICIO 4: TERRARIA (TMODLOADER O VANILLA) ---
+  terraria:
+    image: ryshe/terraria:vanilla-1.4.5.6
+    container_name: terraria-server
+    ports:
+      - "7777:7777"
+    volumes:
+      - ./terraria-data:/root/.local/share/Terraria/Worlds
+    environment:
+      - WORLD_NAME=MundoDogo
+      - AUTOCREATE="3"
+      - DIFFICULTY="2"
+      - MAX_PLAYERS="16"
+      - MOTD="Bienvenido a Terraria DogoCorp"
+      - PASS= ${PASS_TR}
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+# --- SERVICIO 5: SWITCH LAN PLAY (SERVIDOR) ---
+  lanplay:
+    image: spacemeowx2/switch-lan-play
+    container_name: switch-lan
+    ports:
+      - "11451:11451/tcp"
+      - "11451:11451/udp"
+    restart: unless-stopped
